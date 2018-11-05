@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+runescape client.launch.runescape --prmfile=oldschool.prm

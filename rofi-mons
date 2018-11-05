@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+choose_setting() {
+	rofi -p monitor -dmenu << EOF
+monitor 1 only
+monitor 2 only
+duplicate
+extend
+EOF
+}
+
+choose_extend() {
+	rofi -p extend -dmenu << EOF
+top
+left
+right
+bottom
+EOF
+}
+
+choice=$(choose_setting)
+(( $? )) && exit $?
+
+case $choice in
+	'monitor 1 only')
+		mons -o
+		;;
+	'monitory 2 only')
+		mons -s
+		;;
+	duplicate)
+		mons -d
+		;;
+	extend)
+		extend=$(choose_extend)
+		(( $? )) && exit $?
+		mons -e "$extend"
+		;;
+	*)
+		exit 1
+		;;
+esac

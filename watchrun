@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Usage: watchrun PATH ... -- COMMAND [ARG ...]
+
+dirs=()
+until [[ $1 == -- ]]; do
+	dirs+=("$1")
+	shift
+done
+shift
+rest=("$@")
+
+inotifywait -rme modify --format '%w%f' "${dirs[@]}" | while read -r filename; do
+	<&2 echo "Running for ${filename##*/}..."
+	"${rest[@]}" "$filename"
+	<&2 echo "Done."
+done

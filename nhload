@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# Usage: nhload NETHACKRC
+#
+# Put NETHACKRC in NETHACKLOAD_DIR, default ~/Games/nethack/load
+# 
+# Example:
+#
+# $ cat ~/Games/nethack/load/ian
+# OPTIONS=!autopickup,name:ian,race:elf,role:Ranger,gender:male
+# $ nhload ian
+
+NETHACKOPTIONS=@${NETHACKLOAD_DIR:-$HOME/Games/nethack/load}/${*:?No options file provided.} nethack
