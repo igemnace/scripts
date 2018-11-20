@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+mapfile -t wifi_list < <(nmcli --terse --fields SECURITY,BARS,SSID device wifi list)
+
+iter_wifi () {
+	local i wifi security bars ssid
+	for i in "${!wifi_list[@]}"; do
+		wifi="${wifi_list[$i]}"
+		IFS=: read -r security bars ssid <<< "$wifi"
+		printf '%s\t%s\t%s\n' "$((i + 1))" "${ssid/\\:/:}" "$bars"
+	done
+}
+print_wifi () {
+	iter_wifi | column -t -s $'\t'
+}
+
+read -r idx _ < <(print_wifi | rofi -dmenu -i -p wifi)
+# fail fast if rofi was canceled
+[[ -z "$idx" ]] && exit 1
+
+IFS=: read -r security _ ssid <<< "${wifi_list[$((idx - 1))]}"
+ssid="${ssid/\\:/:}" # unescape : in SSID
+
+# check for existing NetworkManager connection
+if nmcli --terse connection show "$ssid" &>/dev/null; then
+	>&2 echo "Activating existing profile for $ssid..."
+	notify-exit nmcli connection up "$ssid"
+else
+	# check if password is necessary
+	if [[ $security =~ "WPA" ]]; then
+		password=$(zenity --entry --title='Authentication' \
+			--text="Password for $ssid:" --hide-text) || exit 1
+
+		>&2 echo "Connecting to $ssid..."
+		notify-exit nmcli device wifi connect "$ssid" password "$password"
+	else
+		>&2 echo "Connecting to $ssid..."
+		notify-exit nmcli device wifi connect "$ssid"
+	fi
+fi
