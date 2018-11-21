@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-mapfile -t wifi_list < <(nmcli --terse --fields SECURITY,BARS,SSID device wifi list)
+progress () {
+	zenity --progress --title "$1" --text "$2" --pulsate --no-cancel --auto-close
+}
+
+mapfile -t wifi_list < <(nmcli --terse --fields SECURITY,BARS,SSID device wifi list) \
+	> >(progress Wifi Scanning...)
 
 iter_wifi () {
 	local i wifi security bars ssid
@@ -23,18 +28,18 @@ ssid="${ssid/\\:/:}" # unescape : in SSID
 
 # check for existing NetworkManager connection
 if nmcli --terse connection show "$ssid" &>/dev/null; then
-	>&2 echo "Activating existing profile for $ssid..."
-	notify-exit nmcli connection up "$ssid"
+	notify-exit nmcli connection up "$ssid" |
+		progress Wifi "Activating existing profile for $ssid..."
 else
 	# check if password is necessary
 	if [[ $security =~ "WPA" ]]; then
 		password=$(zenity --entry --title='Authentication' \
 			--text="Password for $ssid:" --hide-text) || exit 1
 
-		>&2 echo "Connecting to $ssid..."
-		notify-exit nmcli device wifi connect "$ssid" password "$password"
+		notify-exit nmcli device wifi connect "$ssid" password "$password" |
+			progress Wifi "Connecting to $ssid..."
 	else
-		>&2 echo "Connecting to $ssid..."
-		notify-exit nmcli device wifi connect "$ssid"
+		notify-exit nmcli device wifi connect "$ssid" | 
+			progress Wifi "Connecting to $ssid..."
 	fi
 fi
