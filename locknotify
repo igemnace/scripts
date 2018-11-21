@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+sleep .1 # race condition with caps :(
+
+value="$(xset q | awk '/LED mask/ { print $NF }')"
+if (( 0x$value & 0x1 )); then
+	notify-send --urgency=low 'Caps on'
+else
+	notify-send --urgency=low 'Caps off'
+fi
