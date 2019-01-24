@@ -3,6 +3,5 @@
 {
   read -r artist
   read -r title
-  notify-send --urgency=low "$title" "by $artist"
+  notify-send --urgency=low --expire-time=3000 "$title" "by $artist"
 } < <(cmus-remote -Q | grep 'title\|\bartist' | cut -f 1,2 -d ' ' --complement)
-
