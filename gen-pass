@@ -8,7 +8,7 @@ pass_name=$(fd --type file --exec echo '{.}' | rofi -dmenu -i -p "pass")
 length=$(zenity --entry --entry-text=20 \
 	--text="Password length for $pass_name:")
 [[ -n $length ]] || exit 1
-if pass generate -n -c "$pass_name" "$length"; then
+if pass generate -n -c -f "$pass_name" "$length"; then
 	notify-send --urgency=normal "$pass_name" \
 		"New password generated for $pass_name. Copied to clipboard!"
 else
