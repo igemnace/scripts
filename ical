@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cal -3
+
+while read -p 'ical> ' -era input; do
+	# use -3 by default
+	# further directives such as -1 or -n will override
+	cal -3 "${input[@]}"
+done
