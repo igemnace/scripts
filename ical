@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
 
-cal -3
-
-while read -p 'ical> ' -era input; do
+cal () {
 	# use -3 by default
 	# further directives such as -1 or -n will override
-	cal -3 "${input[@]}"
+	command cal -3 "$@"
+}
+month_offset=0
+
+cal
+while read -p 'ical> ' -era input; do
+	if [[ "${input[0]}" == n ]]; then
+		(( month_offset++ ))
+		cal -- "$(printf '%+dmonth' "$month_offset")"
+	elif [[ "${input[0]}" == p ]]; then
+		(( month_offset-- ))
+		cal -- "$(printf '%+dmonth' "$month_offset")"
+	elif ! (( ${#input[@]} )); then
+		month_offset=0
+		cal
+	else
+		cal "${input[@]}"
+	fi
 done
