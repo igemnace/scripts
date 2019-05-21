@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+die () {
+	notify-send "clipscrot: Exit" "$*"
+	exit 1
+}
+
+scrotfile="$HOME/Pictures/Screenshots/clipshot.png"
+
+scrot "$@" "$scrotfile" || die "Screenshot cancelled."
+trap 'rm "$scrotfile"' EXIT
+curl -sF "name=@$scrotfile" 'https://img.vim-cn.com' | xsel -b || die "Couldn't upload image."
+notify-send "Screenshot taken!" "Image URL copied to clipboard!"
