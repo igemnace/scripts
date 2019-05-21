@@ -1,4 +1,34 @@
 #!/usr/bin/env bash
 
-scrot "$@" '%Y-%m-%d_%H.%M.%S.png' --exec 'mv $f ~/Pictures/Screenshots' \
-	&& notify-send --urgency=normal "Screenshot taken!"
+die () {
+	notify-send 'screenscrot: Exit' "$*"
+	exit 1
+}
+
+scrotdir="$HOME/Pictures/Screenshots"
+filename="$(date '+%Y-%m-%d_%H.%M.%S.png')"
+name_file=0
+scrotargs=()
+
+for arg; do
+	case $arg in
+		--name|-n)
+			name_file=1
+			;;
+		*)
+			scrotargs+=("$arg")
+			;;
+	esac
+done
+
+scrot "${scrotargs[@]}" "$scrotdir/$filename" || die 'Screenshot cancelled.'
+
+if (( name_file )); then
+	old="$filename"
+	filename="$(zenity --entry --text='Name your screenshot:' --entry-text="${old%.png}")" \
+		|| die "Rename cancelled. Image retained at $old"
+	[[ $filename =~ .png$ ]] || filename="$filename.png"
+	mv "$scrotdir/$old" "$scrotdir/$filename"
+fi
+
+notify-send 'Screenshot taken!' "Image saved to $filename"
