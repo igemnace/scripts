@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+i3-msg "append_layout $HOME/.config/i3/saves/sil.json"
+sil -mx11 -- -n2
