@@ -18,7 +18,7 @@ fi
 inotifywait -rme modify --format '%w%f' "$1" | while read -r filename; do
 	echo >&2 "Syncing ${filename##*/}..."
 
-	rsync "$filename" "$2/$filename"
+	rsync --inplace "$filename" "$2/$filename"
 
 	echo >&2 "Done."
 done
