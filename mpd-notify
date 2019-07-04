@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Attempts to replicate mpd-notification's format
+format='Playing <b>%title%</b>\nby <i>%artist%</i>\nfrom <i>%album%</i>'
+notify-send 'MPD Notification' "$(mpc -f "$format" current)"
