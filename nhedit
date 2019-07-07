@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Usage: nhedit NETHACKRC
+#
+# NETHACKRC is placed in NETHACKLOAD_DIR, default ~/Games/nethack/load
+
+edit () {
+	"${VISUAL:-${EDITOR:-vi}}" "$@"
+}
+nethackrc=${NETHACKLOAD_DIR:-$HOME/Games/nethack/load}/${*:?No options file provided.}
+
+edit "$nethackrc"
