@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+engines_dir="$HOME/.local/share/search/engines"
+engine="$1"
+shift
+args=("$@")
+script="$engines_dir/$engine"
+
+die () {
+	printf '%s\n' "$*" >&2
+	exit 1
+}
+
+[[ -e "$script" ]] || die "No search engine configured for: $engine"
+
+"$script" "${args[@]}"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+url="https://runescape.wiki?search=$*&title=Special%3ASearch&go=Go"
+
+w3m "$url"
+

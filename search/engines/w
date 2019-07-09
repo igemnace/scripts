@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+url="https://en.wikipedia.org/wiki/index.php?search=$*"
+
+w3m "$url"
