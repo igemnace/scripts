@@ -9,5 +9,5 @@ scrotfile="$HOME/Pictures/Screenshots/clipshot.png"
 
 scrot "$@" "$scrotfile" || die "Screenshot cancelled."
 trap 'rm "$scrotfile"' EXIT
-curl -sF "name=@$scrotfile" 'https://img.vim-cn.com' | xsel -b || die "Couldn't upload image."
+curl -sF "file=@$scrotfile" 'https://0x0.st' | xsel -b || die "Couldn't upload image."
 notify-send "Screenshot taken!" "Image URL copied to clipboard!"
