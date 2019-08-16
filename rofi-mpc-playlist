@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Original author: carnager (see https://github.com/carnager/clerk/issues/39)
+# Modified for my tastes
+
+menu=$(mpc playlist -f '%position%: %artist% - %title%' |
+	rofi -dmenu -i -p '> ') || exit
+IFS=: read -r id rest <<< "$menu"
+mpc play "$id"

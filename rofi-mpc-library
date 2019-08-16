@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Original author: carnager (see https://github.com/carnager/clerk/issues/39)
+# Modified for my tastes
+
+menu=$(mpc listall -f '%artist% - %title%\t%file%' |
+	column -t -o $'\t' -s $'\t' |
+	rofi -dmenu -i -p '> ') || exit
+IFS=$'\t' read -r rest file <<< "$menu"
+mpc insert "$file"
+mpc next
