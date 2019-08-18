@@ -4,6 +4,6 @@
 # Modified for my tastes
 
 menu=$(mpc playlist -f '%position%: %artist% - %title%' |
-	rofi -dmenu -i -p '> ') || exit
+	rofi -dmenu -i -p 'music') || exit
 IFS=: read -r id rest <<< "$menu"
 mpc play "$id"

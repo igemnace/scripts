@@ -5,7 +5,7 @@
 
 menu=$(mpc listall -f '%artist% - %title%\t%file%' |
 	column -t -o $'\t' -s $'\t' |
-	rofi -dmenu -i -p '> ') || exit
+	rofi -dmenu -i -p 'music') || exit
 IFS=$'\t' read -r rest file <<< "$menu"
 mpc insert "$file"
 mpc next
