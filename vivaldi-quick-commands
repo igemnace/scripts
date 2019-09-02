@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+i3-msg '[class="Vivaldi" title="^(?!.*Developer Tools.*$)"] focus'
+
+# Vivaldi doesn't seem to register the keystroke if other keys are held down
+xdotool keyup b
+# even with --clearmodifiers!
+# I had to add Super+F2 explicitly as a key to open Quick Commands
+xdotool key --clearmodifiers F2
