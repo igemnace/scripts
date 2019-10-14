@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if pkill xautolock; then
+	notify-send --urgency=low 'Autolock off'
+else
+	xautolock -time 15 -locker lockscreen & disown
+	notify-send --urgency=low 'Autolock on'
+fi
