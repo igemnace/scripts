@@ -1,3 +1,28 @@
 #!/usr/bin/env bash
 
-i3lock -u --image="$HOME/Pictures/Wallpapers/Doors of Durin.png"
+# Indicator is styled c/o i3lock-color
+#
+# Ring is made smaller and thinner. It is also positioned in the bottom right corner.
+#
+# Ring color is picked from Doors of Durin image itself (for an almost-glowing white).
+#
+# Other indicator colors are picked from Material Design spec instead of Base 16 Eighties,
+# since the low-contrast Eighties colors are harder to distinguish on a small, thin ring.
+
+i3lock --image="$HOME/Pictures/Wallpapers/Doors of Durin.png" \
+	--radius 12 \
+	--ring-width 3 \
+	--ringcolor=f3fcf7ff \
+	--ringvercolor=29b6f6ff \
+	--insidevercolor=00000000 \
+	--ringwrongcolor=ef5350ff \
+	--insidewrongcolor=00000000 \
+	--keyhlcolor=4caf50ff \
+	--bshlcolor=ef5350ff \
+	--separatorcolor=00000000 \
+	--indpos='w - 25: h - 25' \
+	--veriftext= \
+	--wrongtext= \
+	--noinputtext= \
+	--locktext= \
+	--lockfailedtext=
