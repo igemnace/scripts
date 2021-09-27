@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+compositor=picom
+
+if pkill "$compositor"; then
+	notify-send --urgency=low 'Compositor off'
+else
+	"$compositor" & disown
+	notify-send --urgency=low 'Compositor on'
+fi
