@@ -4,8 +4,10 @@
 id=8000
 
 if pkill xautolock; then
+	xset s off -dpms
 	dunstify -r "$id" -i none -u low ' Autolock off'
 else
+	xset s 900 +dpms
 	xautolock -time 15 -locker lockscreen & disown
 	dunstify -r "$id" -u low ' Autolock on'
 fi
