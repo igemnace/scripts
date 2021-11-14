@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+## simple volume manipulation, but with a volume notification after
+## volume-notify inc 5%
+## volume-notify dec 5%
+## volume-notify mute
+
+# assign unique dunst notification ID
+id=8080
+
+case "$1" in
+	inc)
+		# increment
+		increment=${2:-5%}
+		pactl set-sink-mute @DEFAULT_SINK@ false
+		pactl set-sink-volume @DEFAULT_SINK@ +"$increment"
+		;;
+	dec)
+		decrement=${2:-5%}
+		pactl set-sink-mute @DEFAULT_SINK@ false
+		pactl set-sink-volume @DEFAULT_SINK@ -"$decrement"
+		;;
+	mute)
+		decrement=${2:-5%}
+		pactl set-sink-mute @DEFAULT_SINK@ toggle
+		;;
+	*)
+		cat << EOF
+USAGE
+Increase volume by 5%:
+volume-notify inc 5%
+
+Decrease volume by 5%:
+volume-notify dec 5%
+
+Toggle mute:
+volume-notify mute
+EOF
+		;;
+esac
+
+# parse volume amount from pactl
+volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+%' | sed '1s/%//;q')
+
+# send notification based on mute status and volume
+if pactl get-sink-mute @DEFAULT_SINK@ | grep -q yes; then
+	# case: muted
+	dunstify -a volume-notify -u low -r "$id" " Volume muted."
+else
+	# case: non-zero volume
+	dunstify -a volume-notify -u low -r "$id" -h int:value:"$volume" " Volume: ${volume}%"
+fi

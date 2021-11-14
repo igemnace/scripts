@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+## use same as light (arguments passed transparently), but with a brightness notification after
+
+light "$@"
+
+# get brightness value
+brightness=$(light)
+# parse out decimal portion
+brightness=${brightness%.*}
+
+# assign unique dunst notification ID
+id=8888
+
+# trigger notification
+dunstify -a light-notify -u low -r "$id" -h int:value:"$brightness" " Brightness: ${brightness}%"

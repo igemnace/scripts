@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+# assign unique dunst notification ID
+id=8000
+
 if pkill xautolock; then
-	notify-send --urgency=low 'Autolock off'
+	dunstify -r "$id" -i none -u low ' Autolock off'
 else
 	xautolock -time 15 -locker lockscreen & disown
-	notify-send --urgency=low 'Autolock on'
+	dunstify -r "$id" -u low ' Autolock on'
 fi
