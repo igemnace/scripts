@@ -21,9 +21,19 @@ i3lock --image="$HOME/Pictures/Wallpapers/Doors of Durin.png" \
 	--keyhl-color=4caf50ff \
 	--bshl-color=ef5350ff \
 	--separator-color=00000000 \
-	--ind-pos='w - 25: h - 25' \
+	--ind-pos='w - 25 : h - 25' \
 	--verif-text= \
 	--wrong-text= \
 	--noinput-text= \
 	--lock-text= \
-	--lockfailed-text=
+	--lockfailed-text= \
+	--clock \
+	--time-pos='w / 2 : h - 150' \
+	--time-str='%e %b %H:%M' \
+	--time-font='Roboto Mono' \
+	--time-size=24 \
+	--time-color=f3fcf7ff \
+	--time-align 0 \
+	--special-passthrough \
+	--pass-screen-keys \
+	--pass-media-keys
