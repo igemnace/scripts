@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Usage:
+# rnotify user@host title message
+
+connection_string=$1
+shift
+
+# build command with quotes, since ssh will pass the argument directly
+notify_send_command=(notify-send)
+for arg in "$@"; do
+	notify_send_command+=("'$arg'")
+done
+
+# dangerous: lumping everything together with $*. but we can only pass a single string, so...
+ssh "$connection_string" "${notify_send_command[*]}"

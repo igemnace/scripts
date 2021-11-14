@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Usage: rnotify-exit USER@HOST COMMAND [ARG ...]
+
+# for connection with rnotify/ssh
+connection_string="$1"
+shift
+
+# for identification only
+home_string="$USER@$HOSTNAME"
+
+if "$@"; then
+	rnotify "$connection_string" "Done ($home_string)" "$*"
+	exit 0
+else
+	exit_code=$?
+	rnotify "$connection_string" "Exit $exit_code ($home_string)" "$*"
+	exit "$exit_code"
+fi
