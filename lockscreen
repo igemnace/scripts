@@ -34,6 +34,5 @@ i3lock --image="$HOME/Pictures/Wallpapers/Doors of Durin.png" \
 	--time-size=24 \
 	--time-color=f3fcf7ff \
 	--time-align 0 \
-	--special-passthrough \
 	--pass-screen-keys \
 	--pass-media-keys
