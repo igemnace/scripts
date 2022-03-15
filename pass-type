@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+pass_name=$1
+
+if secret="$(pass show "$pass_name")"; then
+	read -r password <<< "$secret"
+	xdotool type "$password"
+	notify-send --urgency=normal "$pass_name" "Password typed!"
+else
+	notify-send --urgency=normal "Password type failed." "No password found for $pass_name."
+fi

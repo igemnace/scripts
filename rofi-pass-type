@@ -5,8 +5,4 @@ pass_name=$(fd --type file --exec echo '{.}' | rofi -dmenu -i -p "pass")
 
 [[ -n $pass_name ]] || exit 1
 
-if secret="$(pass show "$pass_name")"; then
-	read -r password <<< "$secret"
-	xdotool type "$password"
-	notify-send --urgency=normal "$pass_name" "Password typed!"
-fi
+pass-type "$pass_name"
