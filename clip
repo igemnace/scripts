@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# default: assume paste operation to stdout
+operation=paste
+if ! [[ -t 0 ]]; then
+	# case: stdin is piped in. assume copy operation
+	operation=copy
+fi
+
+# detect clipboard program
+if command -v xsel &>/dev/null; then
+	# xsel automatically determines copy or paste based on stdin/stdout
+	exec xsel --clipboard
+elif command -v xclip &>/dev/null; then
+	# determine whether to do copy or paste
+	[[ $operation == copy ]] && exec xclip -selection clipboard -in
+	[[ $operation == paste ]] && exec xclip -selection clipboard -out
+elif command -v pbcopy &>/dev/null; then
+	# determine whether to do copy or paste
+	[[ $operation == copy ]] && exec pbcopy
+	[[ $operation == paste ]] && exec pbpaste
+fi
