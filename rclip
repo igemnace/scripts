@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Usage:
+# rclip USER@HOST
+# 
+# rclip will paste clipboard contents to stdout by default.
+# Pipe into it to copy to clipboard instead:
+#
+# echo new value | rclip USER@HOST
+
+# default: assume paste operation to stdout
+operation=paste
+if ! [[ -t 0 ]]; then
+	# case: stdin is piped in. assume copy operation
+	operation=copy
+fi
+
+connection_string=$1
+# ssh sets PATH automatically. this is a compile time option
+# until I find a better solution, just call clip directly with the expected path
+ssh "$connection_string" '"$HOME/.local/bin/clip" '"$operation"
