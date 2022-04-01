@@ -7,6 +7,10 @@ if ! [[ -t 0 ]]; then
 	operation=copy
 fi
 
+# override operation if argument is explicitly given
+[[ $1 == copy ]] && operation=copy
+[[ $1 == paste ]] && operation=paste
+
 # detect clipboard program
 if command -v xsel &>/dev/null; then
 	# xsel automatically determines copy or paste based on stdin/stdout
