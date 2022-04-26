@@ -2,7 +2,7 @@
 
 echo "Categories:"
 ls /home/ian/.password-store/
-read -p "New pass name: " pass_name
+read -r -p "New pass name: " pass_name
 
 if pass insert "$pass_name"; then
   notify-send --urgency=normal "New password added for $pass_name."

@@ -9,10 +9,10 @@
 # echo new value | rclip USER@HOST
 
 # default: assume paste operation to stdout
-operation=paste
+operation='paste'
 if ! [[ -t 0 ]]; then
 	# case: stdin is piped in. assume copy operation
-	operation=copy
+	operation='copy'
 fi
 
 connection_string=$1

@@ -18,8 +18,7 @@ bottom
 EOF
 }
 
-choice=$(choose_setting)
-(( $? )) && exit $?
+choice=$(choose_setting) || exit "$?"
 
 case $choice in
 	'monitor 1 only')
@@ -32,8 +31,7 @@ case $choice in
 		mons -d
 		;;
 	extend)
-		extend=$(choose_extend)
-		(( $? )) && exit $?
+		extend=$(choose_extend) || exit "$?"
 		mons -e "$extend"
 		;;
 	*)

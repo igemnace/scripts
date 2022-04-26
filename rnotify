@@ -12,5 +12,5 @@ for arg in "$@"; do
 	notify_send_command+=("'$arg'")
 done
 
-# dangerous: lumping everything together with $*. but we can only pass a single string, so...
-ssh "$connection_string" "${notify_send_command[*]}"
+# make use of ssh's [command [argument ...]] syntax
+ssh "$connection_string" "${notify_send_command[@]}"

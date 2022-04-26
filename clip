@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 # default: assume paste operation to stdout
-operation=paste
+operation='paste'
 if ! [[ -t 0 ]]; then
 	# case: stdin is piped in. assume copy operation
 	operation=copy
 fi
 
 # override operation if argument is explicitly given
-[[ $1 == copy ]] && operation=copy
-[[ $1 == paste ]] && operation=paste
+[[ $1 == copy ]] && operation='copy'
+[[ $1 == paste ]] && operation='paste'
 
 # detect clipboard program
 if command -v xsel &>/dev/null; then
