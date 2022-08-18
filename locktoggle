@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
+conf_path="$HOME/.config/locktoggle"
+lockdir=lock
 # assign unique dunst notification ID
 id=8000
 
-if pkill xautolock; then
+[[ -d "$conf_path" ]] || mkdir -p "$conf_path"
+
+# use lockdir to infer toggle state
+if mkdir "$conf_path/$lockdir"; then
+	xset s 900 +dpms
+	dunstify -r "$id" -u low ' Autolock on'
+else
 	xset s off -dpms
 	dunstify -r "$id" -i none -u low ' Autolock off'
-else
-	xset s 900 +dpms
-	xautolock -time 15 -locker lockscreen & disown
-	dunstify -r "$id" -u low ' Autolock on'
+	rmdir "$conf_path/$lockdir"
 fi

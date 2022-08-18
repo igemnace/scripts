@@ -9,7 +9,9 @@
 # Other indicator colors are picked from Material Design spec instead of Base 16 Eighties,
 # since the low-contrast Eighties colors are harder to distinguish on a small, thin ring.
 
-i3lock --image="$HOME/Pictures/Wallpapers/Doors of Durin.png" \
+exec i3lock \
+	--image="$HOME/Pictures/Wallpapers/Doors of Durin.png" \
+	--nofork \
 	--scale \
 	--radius 12 \
 	--ring-width 3 \
