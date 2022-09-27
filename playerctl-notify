@@ -17,7 +17,12 @@ while (( $# )); do
 	shift
 done
 
-playerctl_format=$'{{playerName}}\t{{status}}\t{{title}}\t{{artist}}\t{{album}}'
+playerctl_format=$'{{ default(playerName, "unknown") }}'\
+$'\t{{ status }}'\
+$'\t{{ default(title, "Unknown Media") }}'\
+$'\t{{ default(artist, "null") }}'\
+$'\t{{ default(album, "null") }}'\
+$'\t{{ default(mpris:artUrl, "null") }}'
 
 # helper function with extra args
 playerctl () {
@@ -37,7 +42,7 @@ declare -A player_names=( \
 	[vlc]='VLC' \
 )
 
-playerctl metadata | while IFS=$'\t' read -r player status title artist album; do
+playerctl metadata | while IFS=$'\t' read -r player status title artist album art_url; do
 	# check for skip_first
 	if (( skip )); then
 		skip=0
@@ -45,15 +50,29 @@ playerctl metadata | while IFS=$'\t' read -r player status title artist album; d
 	fi
 
 	# build notification
-	player="${player:-unknown}"
+	# title
 	player_name="${player_names[$player]}"
 	[[ -z $player_name ]] && player_name="${player^*}"
 	notif_title="Media: $player_name"
 
-	notif_body="$status <b>${title:-unknown media}</b>"
+	# body
+	notif_body="$status <b>$title</b>"
 	# conditional lines
-	[[ -n $artist ]] && notif_body+=$"\nby <i>$artist</i>"
-	[[ -n $album ]] && notif_body+=$"\nfrom <i>$album</i>"
+	[[ $artist != null ]] && notif_body+=$"\nby <i>$artist</i>"
+	[[ $album != null ]] && notif_body+=$"\nfrom <i>$album</i>"
 
-	dunstify -a playerctl-notify -r "$id" "$notif_title" "$notif_body"
+	# image
+	notif_image=
+	if [[ $art_url != null ]] && [[ $art_url =~ ^file:// ]]; then
+		notif_image=${art_url#file://}
+	fi
+
+	# build dunstify command
+	dunstify_args=()
+	# conditional icon
+	[[ -n $notif_image ]] && dunstify_args+=(-I "$notif_image")
+	# rest of args
+	dunstify_args+=(-a playerctl-notify -r "$id" "$notif_title" "$notif_body")
+
+	dunstify "${dunstify_args[@]}"
 done
