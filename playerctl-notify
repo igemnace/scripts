@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# assign unique dunst notification ID
+id=8001
+
+follow=0
+skip=0
+while (( $# )); do
+	case $1 in
+		--follow|-F)
+			follow=1
+			;;
+		--skip-first)
+			skip=1
+			;;
+	esac
+	shift
+done
+
+playerctl_format=$'{{playerName}}\t{{status}}\t{{title}}\t{{artist}}\t{{album}}'
+
+# helper function with extra args
+playerctl () {
+	local control_args=()
+	# pass down --follow
+	(( follow )) && control_args+=(--follow)
+	# declare --format
+	control_args+=(--format "$playerctl_format")
+
+	command playerctl "${control_args[@]}" "$@"
+}
+
+# keep an assoc array of nice names
+declare -A player_names=( \
+	[cmus]='cmus' \
+	[mpd]='MPD' \
+	[vlc]='VLC' \
+)
+
+playerctl metadata | while IFS=$'\t' read -r player status title artist album; do
+	# check for skip_first
+	if (( skip )); then
+		skip=0
+		continue
+	fi
+
+	# build notification
+	player="${player:-unknown}"
+	player_name="${player_names[$player]}"
+	[[ -z $player_name ]] && player_name="${player^*}"
+	notif_title="Media: $player_name"
+
+	notif_body="$status <b>${title:-unknown media}</b>"
+	# conditional lines
+	[[ -n $artist ]] && notif_body+=$"\nby <i>$artist</i>"
+	[[ -n $album ]] && notif_body+=$"\nfrom <i>$album</i>"
+
+	dunstify -a playerctl-notify -r "$id" "$notif_title" "$notif_body"
+done
