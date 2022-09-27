@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+subject=$1
+sender=$2
+
+notify-send "Email: $sender" "$subject"
