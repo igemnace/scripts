@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+cd "/run/media/$USER" || exit 1
+device_name=$(fd -d 1 | rofi -dmenu -i -p "unmount")
+
+[[ -n $device_name ]] || exit 1
+
+udiskie-umount "/run/media/$USER/$device_name"
