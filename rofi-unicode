@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-data_dir=/usr/lib/python3.10/site-packages/picker/data
-
-rofimoji --action clipboard -f "$data_dir"/{emojis.csv,latin-1_supplement.csv,general_punctuation.csv,math.csv}
+rofimoji --action clipboard -f emojis latin-1_supplement general_punctuation math 
