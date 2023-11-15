@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if pkill xcape; then
+	notify-send --urgency=low 'Xcape off'
+else
+	xcape -t 200 & disown
+	notify-send --urgency=low 'Xcape on'
+fi
