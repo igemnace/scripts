@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+setxkbmap -option ctrl:nocaps,shift:both_capslock
+xmodmap "$HOME/.Xmodmap"
+pkill xcape
+xcape -t 200
