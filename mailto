@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+exec urxvtc -g 80x32 \
+	-name floating \
+	-e neomutt -e 'source "~/.mutt/folder-hooks/main"' -- "$@"
