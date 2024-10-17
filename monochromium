@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+temp_profile=
+
+clean_temp () {
+	[[ -d "$temp_profile" ]] && rm -r "$temp_profile"
+}
+
+trap clean_temp EXIT
+temp_profile=$(mktemp -d --tmpdir monochrome.XXXXXXXXXX)
+
+chromium --user-data-dir="$temp_profile" --no-first-run
