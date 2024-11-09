@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-url="https://google.com/search?q=$*"
-
-exec w3m "$url"

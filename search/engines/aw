@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-url="https://wiki.archlinux.org/index.php?search=$*"
-
-exec w3m "$url"

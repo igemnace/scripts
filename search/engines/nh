@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-url="https://nethackwiki.com/index.php?search=$*&title=Special%3ASearch&go=Go"
-
-exec w3m "$url"

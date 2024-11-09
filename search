@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+# assoc array of all search engines and their URLs
+declare -A engines=(
+	[a]='https://wiki.archlinux.org/index.php?search=%s'
+	[d]='https://duckduckgo.com/lite?q=%s&kf=-1&kz=-1&kq=-1&kv=-1'
+	[nh]='https://nethackwiki.com/index.php?search=%s&title=Special%3ASearch&go=Go'
+	[w]='https://en.wikipedia.org/wiki/Special:Search?search=%s&ns0=1'
+	[wikt]='https://en.wiktionary.org/w/index.php?search=%s&title=Special%253ASearch&ns0=1'
+)
+mode=cli # rofi or cli
+engine=  # search engine to use
+args=()  # rest of the args: search query
+
+parse_args_rofi () {
+	# use rofi to accept a line of input
+	IFS= read -r line < <(printf '%s\n' "${!engines[@]}" | rofi -dmenu -p search)
+	# exit 0 if nothing is typed (cancelled rofi)
+	[[ -n $line ]] || exit
+	# parse out engine and args from line using IFS
+	local args_str
+	read -r engine args_str <<< "$line"
+	read -ra args <<< "$args_str"
+}
+
+parse_args_cli () {
+	# simply grab args
+	engine="$1"
+	shift
+	args=("$@")
+}
+
+search_rofi () {
+	# i3: ensure tmux: browse window exists and focus it
+	if i3-msg -t get_tree | grep -q 'tmux: browse'; then
+		i3-msg '[title="tmux: browse"] focus'
+	else
+		i3-msg 'workspace "3:"'
+		st -e tmux attach -t browse &>/dev/null & disown
+		sleep 0.1
+	fi
+
+	# tmux: ensure we're on search window
+	# NOTE: assumes only a single tmux: browse client (operates on first found)
+	IFS= read -r client < <(tmux list-clients -t browse -F '#{client_name}')
+	# NOTE: assumes exact browse layout (operates on pane 5)
+	tmux switch-client -c "$client" -t %5
+
+	# tmux: check if we're running another browser
+	# NOTE: assumes exact browse layout (operates on pane 5)
+	IFS=: read -r pane command < <(tmux list-panes -t browse -F '#D:#{pane_current_command}' | grep %5)
+	if [[ $command = w3m ]]; then
+		# already running a browser. send the URL directly with U
+		tmux send-keys -t %5 U C-u "$url" Enter
+	else
+		# not yet running a browser. start w3m with the URL
+		tmux send-keys -t %5 "w3m '$url'" Enter
+	fi
+}
+
+search_cli () {
+	exec w3m "$url"
+}
+
+# check mode: rofi if provided, cli by default
+case "$1" in
+	-r|--rofi) mode=rofi;;
+	*) mode=cli;;
+esac
+
+# accept and parse args depending on mode
+case "$mode" in
+	rofi) parse_args_rofi;;
+	# pass args through
+	*) parse_args_cli "$@";;
+esac
+
+# special case: unrecognized engine. use ddg as default search
+if ! [[ -n ${engines[$engine]} ]]; then
+	args=("$engine" "${args[@]}")
+	engine=d
+fi
+
+# use engine url
+url="${engines[$engine]}"
+# substitute %s with args
+url="${url/\%s/${args[*]}}"
+
+# execute the search depending on mode
+case "$mode" in
+	rofi) search_rofi;;
+	*) search_cli;;
+esac

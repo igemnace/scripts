@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-url="https://duckduckgo.com/lite?q=$*&kf=-1&kz=-1&kq=-1&kv=-1"
-
-exec w3m "$url"
