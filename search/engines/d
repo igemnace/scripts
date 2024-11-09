@@ -2,4 +2,4 @@
 
 url="https://duckduckgo.com/lite?q=$*&kf=-1&kz=-1&kq=-1&kv=-1"
 
-w3m "$url"
+exec w3m "$url"

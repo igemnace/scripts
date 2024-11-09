@@ -2,5 +2,4 @@
 
 url="https://oldschool.runescape.wiki?search=$*&title=Special%3ASearch&go=Go"
 
-w3m "$url"
-
+exec w3m "$url"

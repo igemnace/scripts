@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+url="https://en.wiktionary.org/w/index.php?search=$*&title=Special%253ASearch&ns0=1"
+
+exec w3m "$url"

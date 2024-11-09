@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: notice all my engines just declare url="..." then unconditionally do exec w3m "$url"
+# i should move them all into a function with an assoc array
+
 engines_dir="$HOME/.local/share/search/engines"
 engine="$1"
 shift
@@ -13,4 +16,4 @@ die () {
 
 [[ -e "$script" ]] || die "No search engine configured for: $engine"
 
-"$script" "${args[@]}"
+exec "$script" "${args[@]}"

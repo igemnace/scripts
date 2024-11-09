@@ -2,4 +2,4 @@
 
 url="https://google.com/search?q=$*"
 
-w3m "$url"
+exec w3m "$url"
