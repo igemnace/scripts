@@ -54,7 +54,7 @@ search_rofi () {
 		tmux send-keys -t %5 U C-u "$url" Enter
 	else
 		# not yet running a browser. start w3m with the URL
-		tmux send-keys -t %5 "w3m '$url'" Enter
+		tmux send-keys -t %5 "w3m $(printf %q "$url")" Enter
 	fi
 }
 
