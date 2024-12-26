@@ -4,6 +4,7 @@
 declare -A engines=(
 	[a]='https://wiki.archlinux.org/index.php?search=%s'
 	[d]='https://duckduckgo.com/lite?q=%s&kf=-1&kz=-1&kq=-1&kv=-1'
+	[mdn]='https://developer.mozilla.org/en-US/search?q=%s'
 	[nh]='https://nethackwiki.com/index.php?search=%s&title=Special%3ASearch&go=Go'
 	[w]='https://en.wikipedia.org/wiki/Special:Search?search=%s&ns0=1'
 	[wikt]='https://en.wiktionary.org/w/index.php?search=%s&title=Special%253ASearch&ns0=1'
