@@ -9,4 +9,4 @@ clean_temp () {
 trap clean_temp EXIT
 temp_profile=$(mktemp -d --tmpdir monochrome.XXXXXXXXXX)
 
-chromium --user-data-dir="$temp_profile" --no-first-run
+chromium --user-data-dir="$temp_profile" --no-first-run "$@"
